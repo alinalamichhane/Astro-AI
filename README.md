@@ -228,38 +228,8 @@ npm run build
 
 ### Required Environment Variables
 
-Edit `.env` file with the following:
+Copy `.env.example` and make  `.env` file same details.
 
-```env
-# Django
-SECRET_KEY=your-secret-key-here
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-
-# Database - PostgreSQL
-DATABASE_URL=postgresql://postgres:alina@localhost:5432/astro_ai
-
-# OpenAI (REQUIRED for AI chat)
-OPENAI_API_KEY=sk-your-openai-api-key
-
-# Stripe (REQUIRED for payments)
-STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
-STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key
-STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
-
-# Email (for notifications)
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_HOST_USER=your-email@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password
-DEFAULT_FROM_EMAIL=AstroAI <noreply@astroai.com>
-
-# Frontend URL (for CORS)
-FRONTEND_URL=http://localhost:3000
-
-# Optional: Redis (for caching, Celery, Channels)
-REDIS_URL=redis://localhost:6379/0
-```
 
 ### Getting API Keys
 
@@ -328,48 +298,6 @@ All authenticated endpoints require JWT token in header:
 Authorization: Bearer <access_token>
 ```
 
-### Main API Endpoints
-
-#### Authentication (`/api/v1/auth/`)
-- `POST /register/` - Register new user
-- `POST /login/` - Login (get JWT tokens)
-- `POST /token/refresh/` - Refresh access token
-- `POST /logout/` - Logout (blacklist token)
-- `GET /profile/` - Get user profile
-- `PUT /profile/` - Update user profile
-- `POST /change-password/` - Change password
-
-#### Astrology (`/api/v1/astrology/`)
-- `GET /birth-chart/` - Get user's birth chart
-- `POST /birth-chart/` - Generate birth chart
-- `GET /horoscope/?sign=aries&period=daily` - Get horoscope
-- `GET /horoscope/personalized/` - Get personalized horoscope
-- `GET /kundali-match/` - List Kundali matches
-- `POST /kundali-match/` - Create Kundali match
-- `GET /transits/` - Get planetary transits
-
-#### AI Chat (`/api/v1/chat/`)
-- `GET /sessions/` - List chat sessions
-- `GET /sessions/{id}/` - Get session details
-- `POST /send/` - Send message to AI
-- `DELETE /sessions/{id}/delete/` - Delete session
-
-#### Astrologers (`/api/v1/astrologers/`)
-- `GET /` - List astrologers
-- `GET /{id}/` - Get astrologer details
-- `POST /book/` - Book consultation
-- `GET /consultations/` - My consultations
-- `POST /consultations/{id}/review/` - Review consultation
-
-#### Subscriptions & Payments (`/api/v1/subscriptions/`)
-- `GET /plans/` - List subscription plans (with NPR + USD prices)
-- `POST /initiate/` - Initiate payment (choose gateway: `khalti`, `esewa`, `stripe`)
-- `GET /callback/khalti/` - Khalti payment callback (Khalti redirects here)
-- `GET /callback/esewa/` - eSewa payment callback (eSewa redirects here)
-- `POST /callback/stripe/` - Stripe confirmation (frontend calls after Stripe.js)
-- `GET /my/` - My subscriptions
-- `GET /payments/` - Payment history
-
 ### Payment Gateway Flow
 
 #### Khalti (NPR)
@@ -401,93 +329,10 @@ Authorization: Bearer <access_token>
 4. Backend verifies with Stripe → activates subscription
 ```
 
-#### Marketplace (`/api/v1/marketplace/`)
-- `GET /categories/` - List categories
-- `GET /products/` - List products
-- `GET /products/{slug}/` - Product details
-- `POST /orders/` - Create order
-- `GET /orders/my/` - My orders
-
-#### Courses (`/api/v1/courses/`)
-- `GET /` - List courses
-- `GET /{slug}/` - Course details
-- `POST /{slug}/enroll/` - Enroll in course
-- `GET /my/enrollments/` - My enrollments
-- `POST /{slug}/progress/` - Update progress
-
-### Example API Calls
-
-**Register:**
-```bash
-curl -X POST http://localhost:8000/api/v1/auth/register/ \
-  -H "Content-Type: application/json" \
-  -d '{
-    "username": "john_doe",
-    "email": "john@example.com",
-    "password": "SecurePass123!",
-    "password2": "SecurePass123!",
-    "first_name": "John",
-    "last_name": "Doe"
-  }'
-```
-
-**Login:**
-```bash
-curl -X POST http://localhost:8000/api/v1/auth/login/ \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "john@example.com",
-    "password": "SecurePass123!"
-  }'
-```
-
 **Get Horoscope:**
 ```bash
 curl http://localhost:8000/api/v1/astrology/horoscope/?sign=aries&period=daily
 ```
-
----
-
-## 🗄 Database Schema
-
-### Key Models
-
-**User** (`apps.users`)
-- Custom user model with birth data (date, time, place, coordinates)
-- AI token balance
-- Profile fields (avatar, bio, phone, etc.)
-
-**BirthChart** (`apps.horoscope`)
-- One-to-one with User
-- Stores planetary positions, ascendant, moon sign, sun sign
-
-**Horoscope** (`apps.horoscope`)
-- Daily/weekly/monthly predictions
-- Zodiac-specific content (love, career, health, finance)
-
-**Astrologer** (`apps.astrologers`)
-- Profile, specializations, rates, availability
-- Rating system
-
-**Consultation** (`apps.astrologers`)
-- Booking system with status tracking
-- User reviews
-
-**ChatSession & ChatMessage** (`apps.chat`)
-- AI conversation history
-- Token usage tracking
-
-**Plan & UserSubscription** (`apps.subscriptions`)
-- Subscription tiers
-- Stripe integration
-
-**Product & Order** (`apps.marketplace`)
-- E-commerce for spiritual products
-- Multi-currency support
-
-**Course, Lesson, Enrollment** (`apps.courses`)
-- E-learning platform
-- Progress tracking
 
 ---
 
@@ -567,32 +412,6 @@ python manage.py check
 
 ---
 
-## 📝 Admin Panel Usage
-
-### Adding Content
-
-1. **Astrologers:**
-   - Go to Admin → Astrologers → Add Astrologer
-   - Link to a user account
-   - Set rates, specializations, availability
-
-2. **Products:**
-   - Go to Admin → Products → Add Product
-   - Set prices in both NPR and USD
-   - Add zodiac benefits and healing properties
-
-3. **Courses:**
-   - Go to Admin → Courses → Add Course
-   - Add lessons with video URLs
-   - Mark lessons as preview for free access
-
-4. **Horoscopes:**
-   - Go to Admin → Horoscopes → Add Horoscope
-   - Generate daily content for all 12 signs
-   - Can be automated with Celery tasks
-
----
-
 ## 🔧 Troubleshooting
 
 ### Common Issues
@@ -641,11 +460,5 @@ This project is proprietary. All rights reserved.
 Select Basic Plan → choose eSewa → Pay
 Use test credentials: eSewa ID 9806800001, password Nepal@123, OTP 123456
 
-## 👥 Team
-
-- **Alina Lamichhane** - Senior Software Engineer (6+ years)
-- **Amit Poudel** - Project Manager
-
----
 
 **Built with ❤️ for the astrology community**
