@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80">
+  <!-- Stripe purple wordmark -->
+  <text x="8" y="60" font-family="Arial Black, sans-serif" font-weight="900" font-size="56" fill="#635BFF">stripe</text>
+  <!-- Stripe's characteristic diagonal slash on the 'i' dot -->
+  <rect x="108" y="6" width="8" height="14" rx="2" fill="#635BFF" transform="rotate(-15 112 13)"/>
+</svg>

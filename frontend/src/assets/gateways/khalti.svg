@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80">
+  <!-- Khalti red wordmark with paper-plane icon -->
+  <text x="10" y="58" font-family="Arial Black, sans-serif" font-weight="900" font-size="52" fill="#E31837">khalti</text>
+  <!-- Paper plane arrow top-right -->
+  <polygon points="168,8 195,18 178,28" fill="#E31837"/>
+  <polygon points="178,28 185,42 168,8" fill="#C0001A"/>
+  <circle cx="183" cy="44" r="5" fill="#E31837"/>
+</svg>
